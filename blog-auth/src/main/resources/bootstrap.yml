@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: blog-auth-service
+  profiles:
+    active: dev
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    cache: false
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.180.103:8848
+        namespace: blog
+        file-extension: yaml
+        group: DEFAULT_GROUP
+        refresh-enabled: true
+      discovery:
+        server-addr: 192.168.180.103:8848
+        namespace: blog

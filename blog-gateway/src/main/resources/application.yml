@@ -1,0 +1,53 @@
+server:
+  port: 80
+spring:
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      metrics:
+        enabled: true
+      routes:
+        # system 服务路由（必须放在 /api/** 之前，优先匹配）
+        - id: blog-system-service
+          uri: lb://blog-system-service
+          predicates:
+            - Path=/sys/**,/api/sys/**
+
+        - id: blog-tools-service
+          uri: lb://blog-tools-service
+          predicates:
+            - Path=/tool/**
+
+        - id: blog-aigc-service
+          uri: lb://blog-aigc-service
+          predicates:
+            - Path=/aigc-service/**
+
+        - id: blog-auth-service
+          uri: lb://blog-auth-service
+          predicates:
+            - Path=/sso-service/**,/auth/**
+        # 文件服务路由
+        - id: blog-file-service
+          uri: lb://blog-file-service
+          predicates:
+            - Path=/file/**
+
+        - id: blog-act-service
+          uri: lb://blog-act-service
+          predicates:
+            - Path=/act/**
+        - id: blog-client-service
+          uri: lb://blog-client-service
+          predicates:
+            - Path=/client/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus"
+  metrics:
+    tags:
+      application: ${spring.application.name}

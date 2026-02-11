@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: blog-act-service
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.180.103:8848
+        namespace: blog
+        file-extension: yaml
+        group: DEFAULT_GROUP
+        refresh-enabled: true
+      discovery:
+        server-addr: 192.168.180.103:8848
+        namespace: blog
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: 192.168.180.103:18080
+      eager: true

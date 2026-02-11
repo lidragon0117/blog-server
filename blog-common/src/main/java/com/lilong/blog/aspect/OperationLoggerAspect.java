@@ -1,0 +1,144 @@
+package com.lilong.blog.aspect;
+
+import cn.hutool.json.JSONUtil;
+import com.lilong.blog.annotation.OperationLogger;
+import com.lilong.blog.base.Constants;
+import com.lilong.blog.enums.MessageQueueEnum;
+import com.lilong.blog.exception.PermissionException;
+import com.lilong.blog.helper.helper.CurrentUserHelper;
+import com.lilong.blog.service.message.producer.MessageQueueProducer;
+import com.lilong.blog.utils.AspectUtil;
+import com.lilong.blog.utils.DateUtil;
+import com.lilong.blog.utils.IpUtil;
+import com.lilong.blog.vo.system.SysOperateLogVo;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Method;
+import java.util.Date;
+import java.util.HashMap;
+
+/**
+ * 日志切面
+ */
+@Slf4j
+@Aspect
+@Component
+public class OperationLoggerAspect {
+
+    @Autowired
+    private MessageQueueProducer<String, String> messageQueueProducer;
+
+    /**
+     * 开始时间
+     */
+    private Date startTime;
+
+    @Pointcut(value = "@annotation(operationLogger)")
+    public void pointcut(OperationLogger operationLogger) {
+
+    }
+
+    @Around(value = "pointcut(operationLogger)")
+    public Object doAround(ProceedingJoinPoint joinPoint, OperationLogger operationLogger) throws Throwable {
+        HttpServletRequest request = IpUtil.getRequest();
+        //因给了演示账号所有权限以供用户观看，所以执行业务前需判断是否是管理员操作
+        if (!CurrentUserHelper.hasRole(Constants.ADMIN)) {
+            throw new PermissionException("无权限");
+        }
+        startTime = DateUtil.getNowDate();
+
+        //先执行业务
+        Object result = joinPoint.proceed();
+        try {
+            // 日志收集
+            handle(joinPoint, request);
+
+        } catch (Exception e) {
+            log.error("日志记录出错!", e);
+        }
+
+        return result;
+    }
+
+    /**
+     * 管理员日志收集
+     *
+     * @param point
+     * @throws Exception
+     */
+    private void handle(ProceedingJoinPoint point, HttpServletRequest request) throws Exception {
+
+        Method currentMethod = AspectUtil.INSTANCE.getMethod(point);
+        //获取操作名称
+        OperationLogger annotation = currentMethod.getAnnotation(OperationLogger.class);
+        boolean save = annotation.save();
+        String operationName = AspectUtil.INSTANCE.parseParams(point.getArgs(), annotation.value());
+        if (!save) {
+            return;
+        }
+        // 获取参数名称字符串
+        String paramsJson = getParamsJson(point);
+
+        // 当前操作用户
+        String userName = CurrentUserHelper.getUsername();
+        String type = request.getMethod();
+        String ip = IpUtil.getIp();
+        String url = request.getRequestURI();
+
+        //存储日志
+        Date endTime = new Date();
+        Long spendTime = endTime.getTime() - startTime.getTime();
+
+        SysOperateLogVo operateLog = SysOperateLogVo.builder()
+                .ip(ip)
+                .source(IpUtil.getIp2region(ip))
+                .type(type)
+                .username(userName)
+                .paramsJson(paramsJson)
+                .requestUrl(url)
+                .spendTime(spendTime)
+                .methodName(point.getSignature().getName())
+                .classPath(point.getTarget().getClass().getName())
+                .operationName(operationName).build();
+
+
+        String jsonStr = JSONUtil.toJsonStr(operateLog);
+        log.info("日志发送mq==========>:{}", jsonStr);
+        messageQueueProducer.send(MessageQueueEnum.QUEUE_LOG_MESSAGE, jsonStr);
+    }
+
+    /**
+     * 获取参数 json
+     *
+     * @param joinPoint
+     * @return
+     * @throws ClassNotFoundException
+     * @throws NoSuchMethodException
+     */
+    private String getParamsJson(ProceedingJoinPoint joinPoint) throws ClassNotFoundException, NoSuchMethodException {
+        // 参数值
+        Object[] args = joinPoint.getArgs();
+        Signature signature = joinPoint.getSignature();
+        MethodSignature methodSignature = (MethodSignature) signature;
+        String[] parameterNames = methodSignature.getParameterNames();
+
+        // 通过map封装参数和参数值
+        HashMap<String, Object> paramMap = new HashMap<>();
+        for (int i = 0; i < parameterNames.length; i++) {
+            paramMap.put(parameterNames[i], args[i]);
+        }
+
+        boolean isContains = paramMap.containsKey("request");
+        if (isContains) paramMap.remove("request");
+        return JSONUtil.toJsonStr(paramMap);
+    }
+}

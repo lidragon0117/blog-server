@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lilong.blogact.mapper.SysCommentMapper">
+    <!-- 可以在这里添加自定义的复杂SQL查询 -->
+    <select id="getComments" resultType="com.lilong.blog.vo.comment.CommentListVo">
+        SELECT
+        c.*
+        FROM sys_comment c
+        WHERE c.article_id = #{articleId} and c.parent_id is null
+        <choose>
+            <when test="sortType == 'like'">
+                ORDER BY c.like_count DESC
+            </when>
+            <otherwise>
+                ORDER BY c.create_time DESC
+            </otherwise>
+        </choose>
+
+    </select>
+    <select id="getChildrenComment" resultType="com.lilong.blog.vo.comment.CommentListVo">
+        SELECT
+            c.*
+        FROM sys_comment c
+        WHERE c.parent_id = #{id}
+        ORDER BY c.create_time DESC
+    </select>
+    <select id="selectPage" resultType="com.lilong.blog.vo.comment.SysCommentVO">
+        SELECT
+            c.id,
+            a.title as articleTitle,
+            c.content,
+            c.create_time,
+            c.reply_user_id,
+            c.user_id
+        FROM
+        sys_comment c
+        LEFT JOIN sys_article a ON c.article_id = a.id
+        order by c.create_time desc
+    </select>
+    <select id="selectMyComment" resultType="com.lilong.blog.vo.comment.CommentListVo">
+        SELECT
+            c.id,
+            a.id as articleId,
+            a.title as articleTitle,
+            c.content,
+            c.like_count,
+            c.create_time
+        FROM
+            sys_comment c
+            LEFT JOIN sys_article a ON c.article_id = a.id
+        WHERE
+            c.user_id = #{userId}
+        order by c.create_time desc
+    </select>
+    <select id="getMyReply" resultType="com.lilong.blog.vo.comment.CommentListVo">
+        SELECT
+            c.id,
+            a.id as articleId,
+            a.title as articleTitle,
+            c.reply_user_id as replyUserId,
+            c.content,
+            c.like_count,
+            c.create_time
+        FROM
+            sys_comment c
+            LEFT JOIN sys_article a ON c.article_id = a.id
+        WHERE
+            c.user_id = #{userId} and c.reply_user_id is not null
+        order by c.create_time desc
+    </select>
+</mapper>
