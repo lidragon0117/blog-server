@@ -20,7 +20,7 @@ const routes = [
         path: "/",
         component: Layout,
         meta: {
-            title: "凯龙",
+            title: "智能通用",
             loading: true
         },
         children: [{
@@ -40,7 +40,7 @@ const routes = [
                 component: Archive,
                 meta: {
                     transition: 'fade',
-                    title: '归档 - 凯龙',
+                    title: '归档 - 智能通用',
                     icon: 'fas fa-archive'
                 }
             },
@@ -50,7 +50,7 @@ const routes = [
                 component: Categories,
                 meta: {
                     transition: 'fade',
-                    title: "分类 - 凯龙",
+                    title: "分类 - 智能通用",
                     icon: 'fas fa-folder'
                 }
             },
@@ -60,7 +60,7 @@ const routes = [
                 component: Tags,
                 meta: {
                     transition: 'fade',
-                    title: '标签 - 凯龙',
+                    title: '标签 - 智能通用',
                     icon: 'fas fa-tags'
                 }
             },
@@ -70,7 +70,7 @@ const routes = [
                 component: () =>
                     import ('@/views/moments/index.vue'),
                 meta: {
-                    title: '说说 - 凯龙',
+                    title: '说说 - 智能通用',
                     icon: 'fas fa-comment-dots'
                 }
             },
@@ -80,7 +80,7 @@ const routes = [
                 component: Photos,
                 meta: {
                     transition: 'fade',
-                    title: '相册 - 凯龙',
+                    title: '相册 - 智能通用',
                     icon: 'fas fa-images'
                 }
             },
@@ -91,7 +91,7 @@ const routes = [
                     import ('@/views/photos/detail.vue'),
                 meta: {
                     transition: 'fade',
-                    title: '相册详情 - 凯龙',
+                    title: '相册详情 - 智能通用',
                     icon: 'fas fa-images',
                     hidden: true
                 }
@@ -103,7 +103,7 @@ const routes = [
                     import ( /* webpackPrefetch: true */ '@/views/hotSearch/index.vue'),
                 meta: {
                     transition: 'fade',
-                    title: '热搜 - 凯龙',
+                    title: '热搜 - 智能通用',
                     icon: 'fas fa-fire'
                 }
             },
@@ -124,7 +124,7 @@ const routes = [
                 component: Messages,
                 meta: {
                     transition: 'fade',
-                    title: '留言板 - 凯龙',
+                    title: '留言板 - 智能通用',
                     icon: 'fas fa-comments'
                 }
             },
@@ -135,7 +135,7 @@ const routes = [
                     import ( /* webpackPrefetch: true */ '@/views/friends/index.vue'),
                 meta: {
                     transition: 'fade',
-                    title: '友情链接 - 凯龙',
+                    title: '友情链接 - 智能通用',
                     icon: 'fas fa-user-friends'
                 }
             },
@@ -145,7 +145,7 @@ const routes = [
                 component: About,
                 meta: {
                     transition: 'fade',
-                    title: '关于本站 - 凯龙',
+                    title: '关于本站 - 智能通用',
                     icon: 'fas fa-info-circle'
                 }
             },
@@ -164,7 +164,7 @@ const routes = [
                 component: () =>
                     import ( /* webpackPrefetch: true */ '@/views/profile/index.vue'),
                 meta: {
-                    title: '个人主页 - 凯龙',
+                    title: '个人主页 - 智能通用',
                     icon: 'fas fa-user',
                     hidden: true
                 }
@@ -175,7 +175,7 @@ const routes = [
                 component: () =>
                     import ( /* webpackPrefetch: true */ '@/views/editor/index.vue'),
                 meta: {
-                    title: '写文章 - 凯龙',
+                    title: '写文章 - 智能通用',
                     icon: 'fas fa-edit',
                     requireAuth: true,
                     hidden: true
@@ -187,7 +187,7 @@ const routes = [
                 component: () =>
                     import ( /* webpackPrefetch: true */ '@/views/chat/index.vue'),
                 meta: {
-                    title: '聊天 - 凯龙',
+                    title: '聊天 - 智能通用',
                     icon: 'fas fa-comments',
                     hidden: true
                 }

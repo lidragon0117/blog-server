@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lilong.blog.base.Constants;
 import com.lilong.blog.enums.MenuTypeEnum;
-import com.lilong.blog.helper.helper.CurrentUserHelper;
+import com.lilong.blog.helper.CurrentUserHelper;
 import com.lilong.blog.remote.system.QueryPermissionRequest;
 import com.lilong.blog.vo.menu.RouterVO;
 import com.lilong.system.entity.SysMenu;

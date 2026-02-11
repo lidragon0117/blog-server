@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lilong.blog.constants.RedisConstants;
 import com.lilong.blog.enums.ResourceStatusEnum;
 import com.lilong.blog.exception.ServiceException;
-import com.lilong.blog.helper.helper.CurrentUserHelper;
+import com.lilong.blog.helper.CurrentUserHelper;
 import com.lilong.blog.remote.act.QueryPageRequest;
 import com.lilong.blog.utils.PageUtil;
 import com.lilong.blog.utils.RedisUtil;

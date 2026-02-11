@@ -11,7 +11,7 @@ import com.lilong.blog.constants.RedisConstants;
 import com.lilong.blog.dto.user.SysUserAddAndUpdateDto;
 import com.lilong.blog.dto.user.UpdatePwdDTO;
 import com.lilong.blog.exception.ServiceException;
-import com.lilong.blog.helper.helper.CurrentUserHelper;
+import com.lilong.blog.helper.CurrentUserHelper;
 import com.lilong.blog.utils.PageUtil;
 import com.lilong.blog.utils.RedisUtil;
 import com.lilong.blog.vo.user.OnlineUserVo;

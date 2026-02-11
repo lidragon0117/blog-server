@@ -2,7 +2,7 @@ package com.lilong.blogclient.service.service.impl;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.lilong.blog.helper.helper.CurrentUserHelper;
+import com.lilong.blog.helper.CurrentUserHelper;
 import com.lilong.blog.remote.act.QueryPageRequest;
 import com.lilong.blog.utils.PageUtil;
 import com.lilong.blog.vo.article.ArticleListVo;

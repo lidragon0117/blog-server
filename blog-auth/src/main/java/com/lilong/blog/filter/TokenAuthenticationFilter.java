@@ -7,8 +7,10 @@ import com.lilong.blog.utils.RealApiRpcUtil;
 import com.lilong.blog.utils.ResponseUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +24,7 @@ import java.io.IOException;
  * @description :
  */
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
-
+    public static final String TOKEN = "token";
     /**
      * Token 管理器
      */
@@ -39,7 +41,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String authorizationHeader = StrUtil.isNotEmpty(request.getHeader(HttpHeaders.AUTHORIZATION)) ? request.getHeader(HttpHeaders.AUTHORIZATION) : request.getParameter(TOKEN);
         try {
             if (StrUtil.isNotBlank(authorizationHeader)
                     && authorizationHeader.startsWith(SecurityConstants.BEARER_TOKEN_PREFIX)) {
@@ -68,5 +70,18 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         // 继续后续过滤器链执行
         filterChain.doFilter(request, response);
     }
+
+    private void setAuthentication(String rawToken, HttpServletResponse response) {
+        // 执行令牌有效性检查（包含密码学验签和过期时间验证）
+        boolean isValidToken = tokenManager.validateToken(rawToken);
+        if (!isValidToken) {
+            ResponseUtils.writeErrMsg(response, "A0230", "访问令牌无效或已过期");
+            return;
+        }
+        // 将令牌解析为 Spring Security 上下文认证对象
+        Authentication authentication = tokenManager.parseToken(rawToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
 }
 

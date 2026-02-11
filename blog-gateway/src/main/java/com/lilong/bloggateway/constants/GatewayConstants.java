@@ -20,6 +20,8 @@ public class GatewayConstants {
          */
         public static final String BEARER_TOKEN_PREFIX = "Bearer ";
 
+        public static final String TOKEN = "token";
+
         /**
          * JWT Claims 常量
          */

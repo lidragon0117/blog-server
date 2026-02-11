@@ -1,7 +1,7 @@
 package com.lilong.blogclient.service.service.impl;
 
 import com.lilong.blog.constants.RedisConstants;
-import com.lilong.blog.helper.helper.CurrentUserHelper;
+import com.lilong.blog.helper.CurrentUserHelper;
 import com.lilong.blog.utils.RedisUtil;
 import com.lilong.blogclient.service.service.SignService;
 import lombok.RequiredArgsConstructor;

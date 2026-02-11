@@ -542,7 +542,7 @@ export default {
      */
     shareToWeibo() {
       const url = encodeURIComponent(this.currentUrl)
-      const title = encodeURIComponent(`${this.article.title} - 凯龙`)
+      const title = encodeURIComponent(`${this.article.title} - 智能通用`)
       window.open(
         `http://service.weibo.com/share/share.php?url=${url}&title=${title}`,
         "renren-share", "width=490,height=700")

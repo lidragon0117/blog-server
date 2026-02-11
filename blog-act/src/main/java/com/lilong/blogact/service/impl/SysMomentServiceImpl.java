@@ -3,7 +3,7 @@ package com.lilong.blogact.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lilong.blog.helper.helper.CurrentUserHelper;
+import com.lilong.blog.helper.CurrentUserHelper;
 import com.lilong.blog.utils.PageUtil;
 import com.lilong.blogact.entity.SysMoment;
 import com.lilong.blogact.mapper.SysMomentMapper;

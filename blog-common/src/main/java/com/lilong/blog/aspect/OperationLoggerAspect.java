@@ -5,7 +5,7 @@ import com.lilong.blog.annotation.OperationLogger;
 import com.lilong.blog.base.Constants;
 import com.lilong.blog.enums.MessageQueueEnum;
 import com.lilong.blog.exception.PermissionException;
-import com.lilong.blog.helper.helper.CurrentUserHelper;
+import com.lilong.blog.helper.CurrentUserHelper;
 import com.lilong.blog.service.message.producer.MessageQueueProducer;
 import com.lilong.blog.utils.AspectUtil;
 import com.lilong.blog.utils.DateUtil;

@@ -13,7 +13,8 @@ import lombok.Getter;
 public enum MessageQueueEnum {
 
     QUEUE_LOG_MESSAGE("queue_log_message", "日志消息队列"),
-    ;
+
+    QUEUE_AI_MESSAGE("queue_ai_persistent_message","AI聊天消息持久化MQ" );
     /**
      * 普通队列
      */

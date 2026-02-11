@@ -22,7 +22,7 @@ spring:
         - id: blog-aigc-service
           uri: lb://blog-aigc-service
           predicates:
-            - Path=/aigc-service/**
+            - Path=/aigc/**
 
         - id: blog-auth-service
           uri: lb://blog-auth-service

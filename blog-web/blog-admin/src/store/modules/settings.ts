@@ -31,7 +31,7 @@ export const useSettingsStore = defineStore({
     dynamicTitle: false,
     greyMode: false,
     showFooter: true,
-    title: '凯龙管理系统',
+    title: '智能通用管理系统',
     sidebarStyle: 'dark'
   }),
 

@@ -65,7 +65,7 @@ public class HomeServiceImpl implements HomeService {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("access-key", "f94be500c45148bc185be24a38c04ad3");
         paramMap.put("secret-key", "27563ca627d5db0d57e831ca4de0f75f");
-        String url = "https://www.coderutil.com/api/resou/v1/" + type;
+        String url = "com.lilong/api/resou/v1/" + type;
         String result = HttpUtil.get(url, paramMap);
         return JSONObject.parseObject(result);
     }

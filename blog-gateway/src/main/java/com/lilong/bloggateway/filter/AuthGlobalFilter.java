@@ -13,12 +13,14 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -107,9 +109,9 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
             }
 
             // 4. TODO: 检查 Token 黑名单（预留扩展点，用于强制踢人功能）
-             if (isTokenBlacklisted(token)) {
-                 return unauthorized(exchange, "A0230", "令牌已失效");
-             }
+            if (isTokenBlacklisted(token)) {
+                return unauthorized(exchange, "A0230", "令牌已失效");
+            }
 
             // 5. 提取用户信息并传递给下游服务
             ServerHttpRequest.Builder builder = request.mutate()
@@ -168,8 +170,8 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         // 解析角色列表（JSONArray 转换为 Set）
         JSONArray authoritiesArray = payloads.getJSONArray(GatewayConstants.Security.JwtClaims.AUTHORITIES);
         userInfo.roles = authoritiesArray != null
-            ? new HashSet<>(authoritiesArray.toList(String.class))
-            : new HashSet<>();
+                ? new HashSet<>(authoritiesArray.toList(String.class))
+                : new HashSet<>();
 
         return userInfo;
     }
@@ -186,16 +188,28 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
 
     /**
      * 提取 Token
+     * <p>
+     * 支持二种方式：
+     * 1. Authorization Header（Bearer Token）
+     * 3. URL 参数（token）- 用于 SSE 等不支持自定义 header 的场景
      *
      * @param request 请求
      * @return Token（不含 Bearer 前缀）
      */
     private String extractToken(ServerHttpRequest request) {
+        // 方式1: Authorization Header
+        String finalToken = null;
         String bearerToken = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(GatewayConstants.Security.BEARER_TOKEN_PREFIX)) {
-            return bearerToken.substring(GatewayConstants.Security.BEARER_TOKEN_PREFIX.length());
+            finalToken = bearerToken.substring(GatewayConstants.Security.BEARER_TOKEN_PREFIX.length());
         }
-        return null;
+        // 方式2: URL 参数（用于 EventSource/SSE 等场景）
+        MultiValueMap<String, String> queryParams = request.getQueryParams();
+        String tokenParam = queryParams.getFirst(GatewayConstants.Security.TOKEN);
+        if (StringUtils.hasText(tokenParam) && tokenParam.startsWith(GatewayConstants.Security.BEARER_TOKEN_PREFIX)) {
+            finalToken = tokenParam.substring(GatewayConstants.Security.BEARER_TOKEN_PREFIX.length()).trim();
+        }
+        return finalToken;
     }
 
     /**

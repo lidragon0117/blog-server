@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lilong.blog.base.Constants;
 import com.lilong.blog.dto.feedback.SysFeedbackQueryDto;
-import com.lilong.blog.helper.helper.CurrentUserHelper;
+import com.lilong.blog.helper.CurrentUserHelper;
 import com.lilong.blog.utils.PageUtil;
 import com.lilong.blog.vo.feedback.SysFeedbackVo;
 import com.lilong.blogact.entity.SysFeedback;

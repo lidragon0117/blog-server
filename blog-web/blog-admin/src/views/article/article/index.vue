@@ -122,7 +122,18 @@
         </el-form-item>
 
         <el-form-item label="文章简介" prop="summary">
-          <el-input v-model="form.summary" type="textarea" :rows="3" placeholder="请输入文章简介" />
+          <div class="summary-wrapper">
+            <el-input v-model="form.summary" type="textarea" :rows="3" placeholder="请输入文章简介" />
+            <el-button
+              type="primary"
+              :icon="MagicStick"
+              class="ai-polish-btn"
+              :loading="aiPolishLoading"
+              @click="handleAiPolish"
+            >
+              AI润色
+            </el-button>
+          </div>
         </el-form-item>
 
         <el-row :gutter="20" class="mb-20">
@@ -354,7 +365,8 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage, ElMessageBox,ElLoading  } from 'element-plus'
+import { ElMessage, ElMessageBox, ElLoading } from 'element-plus'
+import { MagicStick } from '@element-plus/icons-vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import UploadImage from '@/components/Upload/Image.vue'
 import { getCategoryListApi } from '@/api/article/category'
@@ -388,6 +400,7 @@ const queryFormRef = ref<FormInstance>()
 const formRef = ref<FormInstance>()
 const mdRef = ref();
 const submitLoading = ref(false)
+const aiPolishLoading = ref(false)
 
 // 选中项数组
 const selectedIds = ref<string[]>([])
@@ -749,6 +762,27 @@ const cancel = () => {
   reptileForm.url = ''
 }
 
+// AI润色
+const handleAiPolish = async () => {
+  if (!form.contentMd && !form.summary) {
+    ElMessage.warning('请先输入文章内容或简介')
+    return
+  }
+
+  // TODO: 调用AI润色接口
+  aiPolishLoading.value = true
+  try {
+    // 模拟API调用
+    await new Promise(resolve => setTimeout(resolve, 1500))
+    ElMessage.success('AI润色功能开发中，敬请期待')
+    // form.summary = '这里是AI润色后的简介内容'
+  } catch (error) {
+    ElMessage.error('AI润色失败')
+  } finally {
+    aiPolishLoading.value = false
+  }
+}
+
 // 分页大小改变
 const handleSizeChange = (val: number) => {
   queryParams.pageSize = val
@@ -889,6 +923,45 @@ const beforeAvatarUpload = (file: File) => {
   .el-tag {
     margin-right: 8px;
     margin-bottom: 8px;
+  }
+
+  .summary-wrapper {
+    width: 100%;
+    position: relative;
+
+    .ai-polish-btn {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 16px;
+      font-size: 13px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      .el-icon {
+        font-size: 14px;
+      }
+    }
+
+    :deep(.el-textarea) {
+      .el-textarea__inner {
+        padding-bottom: 45px;
+      }
+    }
   }
 }
 

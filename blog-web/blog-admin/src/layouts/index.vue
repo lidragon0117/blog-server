@@ -57,6 +57,9 @@
 
   <!-- 水印组件 -->
   <Watermark />
+
+  <!-- 智能问答助手 -->
+  <ChatAssistant />
 </template>
 
 <script setup lang="ts">
@@ -67,6 +70,7 @@ import Sidebar from './components/Sidebar/index.vue'
 import LockScreen from '@/components/LockScreen/index.vue'
 import Watermark from '@/components/Watermark/index.vue'
 import Footer from '@/components/Footer/index.vue'
+import ChatAssistant from '@/components/ChatAssistant/index.vue'
 
 import { useSettingsStore, usePermissionStore } from "@/store";
 import { useTagsViewStore } from '@/store/modules/tagsView'

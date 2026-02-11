@@ -2,7 +2,7 @@ package com.lilong.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lilong.blog.helper.helper.CurrentUserHelper;
+import com.lilong.blog.helper.CurrentUserHelper;
 import com.lilong.system.entity.SysNotifications;
 import com.lilong.system.mapper.SysNotificationsMapper;
 import com.lilong.system.service.SysNotificationsService;

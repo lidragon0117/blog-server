@@ -12,7 +12,7 @@ import com.lilong.blog.dto.auth.LoginDTO;
 import com.lilong.blog.dto.user.LoginUserInfo;
 import com.lilong.blog.enums.MenuTypeEnum;
 import com.lilong.blog.exception.ServiceException;
-import com.lilong.blog.helper.helper.CurrentUserHelper;
+import com.lilong.blog.helper.CurrentUserHelper;
 import com.lilong.blog.permission.TokenManager;
 import com.lilong.blog.remote.system.QueryPermissionRequest;
 import com.lilong.blog.remote.system.QueryRoleRequest;
